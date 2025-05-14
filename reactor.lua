@@ -1,11 +1,6 @@
 local args = {...}
 local status = args[1] or "start"
 
-if status == "start" then
-    reactorStart()
-    startCheckLoop()
-end
-
 function reactorStart()
     local reactorOn = redstone.getOutput("back");
     
@@ -26,4 +21,9 @@ function startCheckLoop()
             redstone.setOutput("back", false);
         end
     end
+end
+
+if status == "start" then
+    reactorStart()
+    startCheckLoop()
 end
