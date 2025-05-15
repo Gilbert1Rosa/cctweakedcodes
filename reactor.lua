@@ -1,29 +1,25 @@
 local args = {...}
 local status = args[1] or "start"
+local reactorOn = redstone.getOutput("back");
 
 function reactorStart()
-    local reactorOn = redstone.getOutput("back");
-    
     if not reactorOn then
         redstone.setOutput("back", true);
         reactorOn = redstone.getOutput("back");
     end
 end
 
-function startCheckLoop()
-    local reactorOverheating = redstone.getInput("left");
-    local reactorHasExcessWaste = redstone.getInput("right");
-    
-    print("Initiating check loop...");
-
-    while true do
-        if reactorOverheating or reactorHasExcessWaste then
-            redstone.setOutput("back", false);
-        end
+function reactorStop()
+    if reactorOn then
+        redstone.setOutput("back", false);
+        reactorOn = redstone.getOutput("back");
     end
 end
 
 if status == "start" then
-    reactorStart()
-    startCheckLoop()
+    reactorStart();
+    local id = multishell.launch({}, "reactorControl.lua");
+    multishell.setTitle(id, "Reactor Loop");
+elseif status == "stop" then
+    reactorStop();
 end
